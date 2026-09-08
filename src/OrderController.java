@@ -24,21 +24,33 @@ public class OrderController {
     }
 
     /** GET /orders -- return every stored order. Hand-written. */
+    @GetMapping("/orders")
     public List<Order> listOrders() {
         return new ArrayList<>(store.values());
     }
 
     /** GET /orders/{id} -- return the matching order, or null if
      *  none exists. TODO: complete with Copilot. */
+    @GetMapping("/orders/{id}")
     public Order getOrderById(long id) {
         // TODO: look up id in `store` and return it (or null).
-        throw new UnsupportedOperationException("TODO: complete via AI");
+        return store.get(id);
+        //throw new UnsupportedOperationException("TODO: complete via AI");
     }
 
     /** POST /orders -- create a new order, assign it the next id,
      *  store it, and return it. TODO: complete with Copilot. */
+    @PostMapping("/orders")
     public Order createOrder(String item, int qty) {
         // TODO: validate item/qty, allocate nextId, put in store, return.
-        throw new UnsupportedOperationException("TODO: complete via AI");
+        if (item == null || item.trim().isEmpty()) {
+            throw new IllegalArgumentException("Item name cannot be null or empty");
+        }
+        if (qty <= 0) {
+            throw new IllegalArgumentException("Quantity must be greater than zero");
+        }
+        Order newOrder = new Order(nextId++, item, qty);
+        store.put(newOrder.id(), newOrder);
+        return newOrder;
     }
 }
